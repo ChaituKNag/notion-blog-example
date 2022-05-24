@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
 
-function App() {
+const Post = ({ post }) => {
+
+  const title = post?.properties?.Name?.title[0]?.plain_text;
+
+  return <div>
+    <p>{title}</p>
+  </div>
+}
+
+export default function App() {
+  const [posts, setPosts] = useState(null);
+  useEffect(() => {
+    // getPosts().then((resp) => {
+    //   console.log(resp);
+    // });
+
+    fetch('/api/posts')
+      .then(res => res.json())
+      .then(data => {
+        setPosts(data);
+      })
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Hello CodeSandbox</h1>
+      {posts && posts.map((post) => <Post post={post} key={post.id}/>)}
     </div>
   );
 }
-
-export default App;
